@@ -8,11 +8,9 @@ import {
 
 import mockData, { Movie } from '../../data/mock';
 
-const Poster = ({ cover, title, score }: Movie, index: number) => (
-  <article key={index}>
-    <img src={cover} alt={title} />
-  </article>
-);
+import Poster from '../Poster';
+
+import './index.css';
 
 interface CarouselData {
   title?: string;
