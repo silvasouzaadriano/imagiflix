@@ -15,9 +15,9 @@ import 'slick-carousel/slick/slick-theme.css';
 import Loading from './components/Loading';
 
 const App = () => {
-  const [ movies, setMovies ] = useState<any[]>([]);
+  const [movies, setMovies] = useState<any[]>([]);
   const [series, setSeries] = useState<any[]>([]);
-  const [ loading, setLoading ] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const moviesUrl = `${URL}/discover/movie${APISTRING}&sort_by=popularity.desc`
   const seriesUrl = `${URL}/discover/tv${APISTRING}&sort_by=popularity.desc`
@@ -45,7 +45,7 @@ const App = () => {
 
   const getMovieList = () => {
     if (movies) {
-      const [featured, ...movieList] = movies;
+      const [...movieList] = movies;
       return movieList;
     }
     return [];
@@ -55,9 +55,9 @@ const App = () => {
     <div className='m-auto antialised font-sans bg-black text-white'>
       {loading ? <Loading title="Carregando..."/> : <Hero {...getFeaturedMovie() } />}
       <NavBar />
-      <Carousel />
-      <Carousel />
-      <Carousel />
+      <Carousel title='Filmes Populares' data={getMovieList()}/>
+      <Carousel title='Séries Populares' data={series}/>
+      <Carousel title='Placeholder'/>
       <Footer />
     </div>
   );
