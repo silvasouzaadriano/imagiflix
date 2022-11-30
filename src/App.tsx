@@ -16,23 +16,30 @@ import Loading from './components/Loading';
 
 const App = () => {
   const [ movies, setMovies ] = useState<any[]>([]);
+  const [series, setSeries] = useState<any[]>([]);
   const [ loading, setLoading ] = useState<boolean>(true);
-  const url = `${URL}/discover/movie${APISTRING}&sort_by=popularity.desc`
+
+  const moviesUrl = `${URL}/discover/movie${APISTRING}&sort_by=popularity.desc`
+  const seriesUrl = `${URL}/discover/tv${APISTRING}&sort_by=popularity.desc`
 
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(url);
-        setMovies(response.data.results);
+        const moviesData = await axios.get(moviesUrl);
+        setMovies(moviesData.data.results);
+
+        const seriesData = await axios.get(seriesUrl)
+        setSeries(seriesData.data.results)
       } catch (error) {
         setMovies([])
+        setSeries([])
       }
     }
 
     fetchData();
     setLoading(false);
-  }, [url]);
+  }, [moviesUrl, seriesUrl]);
 
   return (
     <div className='m-auto antialised font-sans bg-black text-white'>
