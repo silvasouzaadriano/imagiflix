@@ -43,6 +43,14 @@ const App = () => {
 
   const getFeaturedMovie = () => movies && movies[0];
 
+  const getMovieList = () => {
+    if (movies) {
+      const [featured, ...movieList] = movies;
+      return movieList;
+    }
+    return [];
+  };
+
   return (
     <div className='m-auto antialised font-sans bg-black text-white'>
       {loading ? <Loading title="Carregando..."/> : <Hero {...getFeaturedMovie() } />}
