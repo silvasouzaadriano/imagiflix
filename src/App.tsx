@@ -41,9 +41,11 @@ const App = () => {
     setLoading(false);
   }, [moviesUrl, seriesUrl]);
 
+  const getFeaturedMovie = () => movies && movies[0];
+
   return (
     <div className='m-auto antialised font-sans bg-black text-white'>
-      {loading ? <Loading title="Carregando..."/> : <Hero {...movies[0] } />}
+      {loading ? <Loading title="Carregando..."/> : <Hero {...getFeaturedMovie() } />}
       <NavBar />
       <Carousel />
       <Carousel />
