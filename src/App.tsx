@@ -30,14 +30,15 @@ const App = () => {
 
         const seriesData = await axios.get(seriesUrl)
         setSeries(seriesData.data.results)
+        setLoading(false);
       } catch (error) {
         setMovies([])
         setSeries([])
+        setLoading(false);
       }
     }
 
     fetchData();
-    setLoading(false);
   }, [moviesUrl, seriesUrl]);
 
   const getFeaturedMovie = () => movies && movies[0];
