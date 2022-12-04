@@ -22,7 +22,6 @@ const App = () => {
   const moviesUrl = `${URL}/discover/movie${APISTRING}&sort_by=popularity.desc`
   const seriesUrl = `${URL}/discover/tv${APISTRING}&sort_by=popularity.desc`
 
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -53,11 +52,21 @@ const App = () => {
 
   return (
     <div className='m-auto antialised font-sans bg-black text-white'>
-      {loading ? <Loading title="Carregando..."/> : <Hero {...getFeaturedMovie() } />}
-      <NavBar />
-      <Carousel title='Filmes Populares' data={getMovieList()}/>
-      <Carousel title='Séries Populares' data={series}/>
-      <Carousel title='Placeholder'/>
+      {loading
+        ? 
+          <>
+            <Loading /> 
+            <NavBar />
+          </>
+        : 
+          <>
+            <Hero {...getFeaturedMovie() } />
+            <NavBar />
+            <Carousel title='Filmes Populares' data={getMovieList()}/>
+            <Carousel title='Séries Populares' data={series}/>
+            <Carousel title='Placeholder'/>
+          </>
+      }
       <Footer />
     </div>
   );
