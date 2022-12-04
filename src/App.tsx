@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react';
 
 import axios from 'axios';
 
+import emitter from './utils/eventEmitter';
 
-import { URL, APISTRING } from './data/contants'
+import { URL, APISTRING, EVENTS } from './data/contants'
+
+import { Title } from './data/mock';
 
 import Hero from './components/Hero';
 import NavBar from './components/NavBar';
@@ -18,13 +21,33 @@ const App = () => {
   const [movies, setMovies] = useState<any[]>([]);
   const [series, setSeries] = useState<any[]>([]);
   const [upComing, setUpComing] = useState<any[]>([]);
+  const [title, setTitle] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   const moviesUrl = `${URL}/discover/movie${APISTRING}&sort_by=popularity.desc`
   const seriesUrl = `${URL}/discover/tv${APISTRING}&sort_by=popularity.desc`
   const upComingUrl = `${URL}/movie/upcoming${APISTRING}&sort_by=popularity.desc`
 
+  const getFeaturedMovie = () => movies && movies[0];
+
+  const getMovieList = () => {
+    if (movies) {
+      const [...movieList] = movies;
+      return movieList;
+    }
+    return [];
+  };
+
+  const getTitle = async ({ type, id }: Title) => {
+    setLoading(true);
+    const title = await axios.get(`${URL}/${type}/${id}${APISTRING}`)
+    setTitle(title.data);
+    setLoading(false);
+  };
+
   useEffect(() => {
+    emitter.addListener(EVENTS.PosterClick, getTitle);
+    
     const fetchData = async () => {
       try {
         const moviesData = await axios.get(moviesUrl);
@@ -48,15 +71,7 @@ const App = () => {
     fetchData();
   }, [moviesUrl, seriesUrl, upComingUrl]);
 
-  const getFeaturedMovie = () => movies && movies[0];
-
-  const getMovieList = () => {
-    if (movies) {
-      const [...movieList] = movies;
-      return movieList;
-    }
-    return [];
-  };
+  useEffect(() => title && console.log(title), [title]);
 
   return (
     <div className='m-auto antialised font-sans bg-black text-white'>
