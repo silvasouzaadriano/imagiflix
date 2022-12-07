@@ -1,10 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faPlayCircle,
 } from '@fortawesome/free-solid-svg-icons';
-
-import emitter from '../../utils/eventEmitter';
 
 import Score from '../Score';
 
@@ -12,14 +10,17 @@ import { IMAGEURL, EVENTS } from '../../data/contants';
 
 import { Movie, TitleType } from '../../data/mock';
 
+import { EventContext } from '../../context/eventContext';
+
 import './index.css';
 
 const Poster = ({ cover, poster_path, title, name, vote_average, id }: Movie, index: number) => {
+  const { dispatchEvent } = useContext(EventContext);
 
   const handleClick = () => {
     const type = title ? TitleType.Movie : TitleType.Serie;
 
-    emitter.emit(EVENTS.PosterClick, { type, id });
+    dispatchEvent(EVENTS.PosterClick, {type, id})
   };
 
   return (
