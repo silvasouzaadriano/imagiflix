@@ -1,11 +1,12 @@
-import React from 'react';
-import emitter from '../../utils/eventEmitter';
+import React, { useContext } from 'react';
 import { IMAGEURL, EVENTS } from '../../data/contants';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 
 import Score from '../Score';
+
+import { EventContext } from '../../context/eventContext';
 
 const Modal = ({
   poster_path,
@@ -18,20 +19,21 @@ const Modal = ({
   runtime,
   number_of_seasons,
 }: any) => {
+  const { dispatchEvent } = useContext(EventContext);
 
   const handleClick = () => {
-    emitter.emit(EVENTS.ModalClose);
+    dispatchEvent(EVENTS.ModalClose, {})
   };
 
   return (
     <div className='fixed top-0 left-0 z-10 p-12 w-full h-screen grid place-items-center'>
       <article className='w-full h-full grid grid-flow-col auto-cols-auto p-8 bg-black shadow-lg opacity-90'>
         <img
-          className='w-4/5 h-full'
+          className='w-auto h-96'
           src={`${IMAGEURL}/w500/${poster_path}`}
           alt={title ? title : name}
         />
-        <div className='relative'>
+        <div className='relative ml-6'>
           <FontAwesomeIcon
             className='cursor-pointer absolute top-0 right-0 text-red-600'
             icon={faTimesCircle}

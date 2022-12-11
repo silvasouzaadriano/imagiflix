@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 
 import axios from 'axios';
 
-import emitter from './utils/eventEmitter';
-
 import { URL, APISTRING, EVENTS } from './data/contants'
 
 import { Title } from './data/mock';
@@ -12,6 +10,8 @@ import Hero from './components/Hero';
 import NavBar from './components/NavBar';
 import Carousel from './components/Carousel';
 import Footer from './components/Footer';
+
+import { EventContext } from './context/eventContext';
 
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -46,10 +46,22 @@ const App = () => {
     setLoading(false);
   };
 
+  const closeModal = () => setTitle(null)
+
+  const dispatchEvent = (eventType: string, { type, id }: Title) =>{
+    switch (eventType) {
+      case EVENTS.PosterClick:
+        getTitle({ type, id });
+        break;
+      case EVENTS.ModalClose:
+        closeModal();
+        break;
+      default:
+        break;
+    }
+  }
+
   useEffect(() => {
-    emitter.addListener(EVENTS.PosterClick, getTitle);
-    emitter.addListener(EVENTS.ModalClose, () => setTitle(null));
-    
     const fetchData = async () => {
       try {
         const moviesData = await axios.get(moviesUrl);
@@ -85,13 +97,15 @@ const App = () => {
           <>
             <Hero {...getFeaturedMovie() } />
             <NavBar />
-            <Carousel title='Filmes Populares' data={getMovieList()}/>
-            <Carousel title='Séries Populares' data={series}/>
-            <Carousel title='Em breve...' data={upComing}/>
+            <EventContext.Provider value={{ dispatchEvent }}>
+              <Carousel title='Filmes Populares' data={getMovieList()}/>
+              <Carousel title='Séries Populares' data={series}/>
+              <Carousel title='Em breve...' data={upComing}/>
+              {!loading && title && <Modal {...title} />}
+            </EventContext.Provider>
           </>
       }
       <Footer />
-      {!loading && title && <Modal {...title} />}
     </div>
   );
 };
