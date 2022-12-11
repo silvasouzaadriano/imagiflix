@@ -25,7 +25,7 @@ const Modal = ({
 
   return (
     <div className='fixed top-0 left-0 z-10 p-12 w-full h-screen grid place-items-center'>
-      <article className='w-full h-full grid grid-flow-col auto-cols-max p-8 bg-black shadow-lg opacity-90'>
+      <article className='w-full h-full grid grid-flow-col auto-cols-auto p-8 bg-black shadow-lg opacity-90'>
         <img
           className='w-4/5 h-full'
           src={`${IMAGEURL}/w500/${poster_path}`}

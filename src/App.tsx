@@ -16,12 +16,13 @@ import Footer from './components/Footer';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import Loading from './components/Loading';
+import Modal from './components/Modal';
 
 const App = () => {
   const [movies, setMovies] = useState<any[]>([]);
   const [series, setSeries] = useState<any[]>([]);
   const [upComing, setUpComing] = useState<any[]>([]);
-  const [title, setTitle] = useState<any[]>([]);
+  const [title, setTitle] = useState<any>();
   const [loading, setLoading] = useState<boolean>(true);
 
   const moviesUrl = `${URL}/discover/movie${APISTRING}&sort_by=popularity.desc`
@@ -47,6 +48,7 @@ const App = () => {
 
   useEffect(() => {
     emitter.addListener(EVENTS.PosterClick, getTitle);
+    emitter.addListener(EVENTS.ModalClose, () => setTitle(null));
     
     const fetchData = async () => {
       try {
@@ -71,8 +73,6 @@ const App = () => {
     fetchData();
   }, [moviesUrl, seriesUrl, upComingUrl]);
 
-  useEffect(() => title && console.log(title), [title]);
-
   return (
     <div className='m-auto antialised font-sans bg-black text-white'>
       {loading
@@ -91,6 +91,7 @@ const App = () => {
           </>
       }
       <Footer />
+      {!loading && title && <Modal {...title} />}
     </div>
   );
 };
