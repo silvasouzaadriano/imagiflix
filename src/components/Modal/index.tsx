@@ -1,11 +1,12 @@
-import React from 'react';
-import emitter from '../../utils/eventEmitter';
+import React, { useContext } from 'react';
 import { IMAGEURL, EVENTS } from '../../data/contants';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 
 import Score from '../Score';
+
+import { EventContext } from '../../context/eventContext';
 
 const Modal = ({
   poster_path,
@@ -18,9 +19,10 @@ const Modal = ({
   runtime,
   number_of_seasons,
 }: any) => {
+  const { dispatchEvent } = useContext(EventContext);
 
   const handleClick = () => {
-    emitter.emit(EVENTS.ModalClose);
+    dispatchEvent(EVENTS.ModalClose, {})
   };
 
   return (
