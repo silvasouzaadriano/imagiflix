@@ -5,14 +5,29 @@ import logo from '../../assets/imagiflix.png';
 import { faSearch, faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import placeholderUser from '../../assets/user.jpg';
 
+import { EVENTS } from '../../data/contants';
+
+import emitter from '../../utils/eventEmitter';
+
 import './index.css';
 
 const NavBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [searchInput, setSearchInput] = useState<string>('');
 
   const handleClick = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
+  const handleOnChange = (event: any) => {
+    setSearchInput(event.target.value)
+  }
+
+  const handleSearchSubmit = (event: any) => {
+    event.preventDefault();
+    emitter.emit(EVENTS.Search, searchInput)
+    setSearchInput('')
+  }
 
   return (
     <nav className='navbar absolute top-0 left-0 grid grid-cols-2 items-center w-full p-8'>
@@ -36,10 +51,12 @@ const NavBar = () => {
             className='w-full bg-black border border-white rounded py-1 px-3 transition-all duration-300 ease-in-out opacity-0 hover:opacity-100 focus:opacity-100'
             type='text'
             placeholder='Títulos, gente e gêneros'
+            onChange={e => handleOnChange(e)}
+            value={searchInput}
           />
           <button
             className='search absolute right-0 py-1 px-2'
-            onClick={(e) => e.preventDefault()}
+            onClick={e => handleSearchSubmit(e)}
           >
             <FontAwesomeIcon icon={faSearch} />
           </button>
